@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
+    <title></title>
+    <style>
+
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="courses.html">Courses</a>
+                    </li>
+                    <li class="nav-item">
+                            <a class="nav-link" href="students.html">Students</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="subjects.html">Subjects</a>
+                    </li>
+                    <li class="nav-item">
+                            <a class="nav-link" href="teachers.html">Teachers</a>
+                    </li>
+                </ul>  
+            </div>     
+        </nav>
+    <div class="container" id="batchElement" style="margin-top:13px;">
+        <h2>Upcoming Batches of {{currentYear}}</h2>
+        <div class="row content">
+            <div class="col-3 card mx-4 my-4 p-4" v-for="batch in upcomingBatches">
+                <h5 class="batchName">{{batch.batchName}}</h5><br />
+            </div>
+        </div>
+    </div>
+
+    <script>
+     let app = new Vue({
+            el: '#batchElement',
+            data: {
+                batches: [],
+                upcomingBatches: [],
+                currentYear: (new Date()).getFullYear(),
+                courses: []
+           },
+            mounted(){
+                    this.getAllBatches();
+            },
+            methods: {
+                getAllBatches(){
+                    axios.get('http://localhost:2222/batches/')
+                        .then((response) => {   
+                            this.batches = response.data
+                            this.getUpcomingBatches()
+                        })
+                },
+                
+                getUpcomingBatches(){
+                    for(var batch in this.batches){
+                        var year = ((this.batches[batch]).batchName.split(' '))[1]
+                        if(parseInt(year) >= (new Date()).getFullYear()){
+                            this.upcomingBatches.push(this.batches[batch])
+                        }
+                    }
+                }               
+            }
+        })
+    </script>
+</body>
+<footer class="page-footer font-small blue pt-4 mt-4">
+    <div class="container-fluid text-center text-md-left">
+    <div class="footer-copyright py-3 text-center">
+        © 2018 Copyright : Piyush Aggarwal
+    </div>
+</footer>
+</html>

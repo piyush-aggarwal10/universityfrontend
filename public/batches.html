@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
+    <title>School</title>
+    <style>
+        .card{
+        background-color: #0000000a;
+        }
+        a:hover {
+            color:tomato;
+            text-decoration: none;
+        }
+        a{
+            color:tomato;
+        } 
+        .spanClass {
+            display: -webkit-inline-box;
+        }
+        .labelClass{
+            width: 150px;
+        }
+        #buttonspan{
+            float: right;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="addNewBatch.html">Add New Batch</a>
+                </li>
+         
+            </ul>  
+        </div>     
+    </nav>
+
+    <div class="container" id="batchElement" style="margin-top:13px;">
+        <h2>Batches</h2>
+        <div class="row content">
+            <div class="col-3 card mx-4 my-4 p-4" v-for="batch in batches">
+                <center><h5 class="batchName">{{batch.batchName}}</h5>    </center>
+                <span style="text-align:right;" id="buttonspan">
+                    <button class="btn btn-primary" v-on:click="viewLectures(batch.batchId)">View Lecture</button>
+                    <button class="btn btn-primary" v-on:click="addLecture(batch.batchId)">Add Lecture</button>
+                </span>       <br />
+                <span style="text-align:right;" id="buttonspan">
+                    <button class="btn btn-primary" v-on:click="viewStudents(batch.batchId)">View Students</button>
+                </span>  
+            </div>
+        </div>
+    </div>
+    
+     <br><br>
+        
+    
+    <script>
+        let app=new Vue({
+            el:'#batchElement',  
+            data:{
+                batches: [],
+                courseId: ''
+            },
+            mounted()
+            {
+                this.getAllBatches()
+            },
+            methods:{
+                getAllBatches()
+                {
+                    this.courseId=localStorage['courseId']
+                    axios.get("http://localhost:2222/courses/" + this.courseId + "/batches")
+                    .then((response)=>{
+                        this.batches = response.data
+                    },(error)=>{
+                        console.log("Error")
+                    })
+                },
+
+                viewLectures(batchId)
+                {
+                    localStorage['batchId'] = batchId
+                    window.location.href = "lectures.html"
+                },
+
+                addLecture(batchId)
+                {
+                    localStorage['batchId'] = batchId
+                    window.location.href = "addNewLecture.html"
+                },
+
+                viewStudents(batchId){
+                    localStorage['batchId'] = batchId
+                    window.location.href = "studentsInABatch.html"
+                }
+            }
+        })
+         
+    </script>
+</body>
+</html>

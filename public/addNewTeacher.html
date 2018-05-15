@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>School</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <style>
+            #addTeacherForm{
+                background-color: #0000000a;
+                width: 568px;
+                padding: 31px;        
+            }
+            .spanClass {
+                display: -webkit-inline-box;
+            }
+            .labelClass{
+                width: 150px;
+            }
+            #buttonspan{
+                float: right;
+            }
+            #heading{
+                color: tomato;
+                padding: 19px;
+            }
+            a:hover {
+                color: #856404c4;
+                text-decoration: none;
+            }
+            a{
+                color:#8564047a;
+            }   
+        </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                </ul>  
+            </div>         
+        </nav>
+    <br />
+
+    <h2 id="heading" align="center">Add New Teacher</h2><br />
+    <div id="addTeacherForm" class="container">
+        <span class="spanClass"><label class="labelClass">Teacher Name:</label><input class="form-control" style="max-width: 400px;" type="text" name="teacherName" v-model="teacherName"></span><br /><br />
+        <span class="spanClass">
+            <label class="labelClass">Select Subject:</label>
+            <select class="form-control" style="max-width:200px;" name="subjectDropdown" id="subjectDropdown" v-model="selected">
+                <option disabled value="">Please select one</option>
+                <option v-bind:value='subject.subjectId' v-for="subject in subjects">
+                    {{subject.subjectName}}
+                </option>
+            </select>  
+        </span>    <br /><br />
+        <span id="back"><a href="index.html">Back To Homepage</a></span>
+        <span style="text-align:right;" id="buttonspan"><button class="btn btn-primary" v-on:click="addNewTeacher">Add Teacher</button></span>
+        
+    </div>
+    <br /><br /><br />
+    <br />
+
+    <script>
+        let app=new Vue({
+            el:'#addTeacherForm',  
+            data:{
+                teacherName: '',
+                subjects: [],
+                selected: ''
+            },
+            mounted()
+            {
+                this.getAllSubjects()
+                
+            },
+            methods:{
+                getAllSubjects()
+                {
+                    axios.get("http://localhost:2222/subjects")
+                    .then((response)=>{
+                        this.subjects=response.data
+                    })
+                },
+                addNewTeacher()
+                {
+                    axios.post("http://localhost:2222/teachers", {
+                        teacherName : this.teacherName,
+                        subjectId: this.selected,
+                     })
+                    .then((response) => {
+                        window.alert('Teacher added!!!')
+                    })                  
+                }                          
+            }
+        })
+    </script>
+</body>
+</html>

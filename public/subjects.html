@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>School</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <style>
+        .card{
+        background-color: #0000000a;
+        }
+        a:hover {
+            color:tomato;
+            text-decoration: none;
+        }
+        a{
+            color:tomato;
+        } 
+    </style>
+</head>
+<body>   
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="addNewSubject.html">Add New Subject</a>
+                    </li>
+                </ul>  
+            </div>         
+        </nav>
+    <br />
+            
+    <div class="container" id="app" style="margin-top:13px;">
+        <h2>Subjects</h2>
+        <div class="row content">
+            <div class="col-3 card mx-4 my-4 p-4" v-for="subject in subjects">
+                <h5 class="subjectName">{{subject.subjectName}}</h5>            
+            </div>
+        </div>
+    </div> 
+        
+                    
+    <script>
+         let app=new Vue({
+            el:'#app',  
+            data:{
+                subjects: []
+            },
+            mounted()
+            {
+                this.getAllSubjects()
+            },
+            methods:{
+                getAllSubjects()
+                {
+                    axios.get("http://localhost:2222/subjects")
+                    .then((response) => {
+                        this.subjects = response.data
+                    },(error) => {
+                        console.log("Error")
+                    })
+                },
+                                
+            }
+        })
+    </script>
+</body>
+</html>

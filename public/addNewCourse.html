@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title>School</title>
+    <style>
+        #addCourseForm{
+            background-color: #0000000a;
+            width: 568px;
+            padding: 31px;        
+        }
+        .spanClass {
+            display: -webkit-inline-box;
+        }
+        .labelClass{
+            width: 150px;
+        }
+        #buttonspan{
+            float: right;
+        }
+        #heading{
+            color: tomato;
+            padding: 19px;
+        }
+        a:hover {
+            color: #856404c4;
+            text-decoration: none;
+        }
+        a{
+            color:#8564047a;
+        }   
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Home</a>
+                </li>
+            </ul>  
+        </div>     
+    </nav>
+        
+
+    <h2 id="heading" align="center">Add New Course</h2><br />
+    <div id="addCourseForm" class="container">
+        <span class="spanClass"><label class="labelClass">Course Name:</label><input class="form-control" style="max-width: 400px;" type="text" name="courseName" v-model="courseName"></span><br /><br />
+        <br /><br />
+        <span id="back"><a href="index.html">Back To Homepage</a></span>
+        <span style="text-align:right;" id="buttonspan"><button class="btn btn-primary" v-on:click="addCourse">Add Course</button></span>
+    </div>
+    <br /><br /><br />
+    <br />
+    <footer class="page-footer font-small blue pt-4 mt-4">
+        <div class="container-fluid text-center text-md-left">
+        <div class="footer-copyright py-3 text-center">
+            © 2018 Copyright : Piyush Aggarwal
+        </div>
+    </footer>
+
+    <script>
+        let app=new Vue({
+            el:'#addCourseForm',  
+            data:{
+                courseName: '',
+            },
+            mounted()
+            {   
+            },
+            methods:{
+                addCourse()
+                {
+                    axios.post("http://localhost:2222/courses/", {
+                        courseName : this.courseName
+                     })
+                    .then((response) => {
+                        window.alert('Course added successfully!')
+                    })                  
+                }
+                           
+            }
+        })
+    </script>
+</body>
+</html>

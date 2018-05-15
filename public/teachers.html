@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>School</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <style>
+            .card{
+            background-color: #0000000a;
+            }
+            a:hover {
+                color:tomato;
+                text-decoration: none;
+            }
+            a{
+                color:tomato;
+            } 
+        </style>
+</head>
+<body>
+        
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="addNewTeacher.html">Add New Teacher</a>
+                    </li>
+                </ul>  
+            </div>         
+        </nav>
+    <br />
+            
+    <div class="container" id="app" style="margin-top:13px;">
+        <h2>Teachers</h2>
+        <div class="row content">
+            <div class="col-3 card mx-4 my-4 p-4" v-for="teacher in teachers">
+                <h5 class="teacherName">{{teacher.teacherName}}</h5>            
+            </div>
+        </div>
+    </div> 
+        
+                    
+    <script>
+        let app=new Vue({
+            el:'#app',  
+            data:{
+                teachers: [],
+            },
+            mounted()
+            {
+                this.getAllTeachers()
+            },
+            methods:{
+                getAllTeachers()
+                {
+                    axios.get("http://localhost:2222/teachers")
+                    .then((response)=>{
+                        this.teachers = response.data
+                    },(error)=>{
+                        console.log("Error")
+                    })
+                }
+                                
+            }
+        })
+    </script>
+</body>
+</html>

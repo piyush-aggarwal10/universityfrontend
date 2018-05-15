@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>School</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <style>
+            #addLectureForm{
+                background-color: #0000000a;
+                width: 568px;
+                padding: 31px;        
+            }
+            .spanClass {
+                display: -webkit-inline-box;
+            }
+            .labelClass{
+                width: 150px;
+            }
+            #buttonspan{
+                float: right;
+            }
+            #heading{
+                color: tomato;
+                padding: 19px;
+            }
+            a:hover {
+                color: #856404c4;
+                text-decoration: none;
+            }
+            a{
+                color:#8564047a;
+            }   
+        </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Home</a>
+                </li>
+            </ul>  
+        </div>         
+        </nav>
+    <br />
+
+    <h2 id="heading" align="center">Add New Lecture</h2><br />
+    <div id="addLectureForm" class="container">
+        <span class="spanClass"><label class="labelClass">Lecture Name:</label><input class="form-control" style="max-width: 400px;" type="text" name="lectureName" v-model="lectureName"></span><br /><br />
+        <span class="spanClass">
+            <label class="labelClass">Select Teacher:</label>
+            <select class="form-control" style="max-width:200px;" name="teacherDropdown" id="teacherDropdown" v-model="selected">
+                <option disabled value="">Please select one</option>
+                <option v-bind:value='teacher.teacherId' v-for="teacher in teachers">
+                    {{teacher.teacherName}}
+                </option>
+            </select>       
+        </span>    <br /><br />
+        <span id="back"><a href="index.html">Back To Homepage</a></span>
+        <span style="text-align:right;" id="buttonspan"><button class="btn btn-primary" v-on:click="addLecture">Add Lecture</button></span>
+        
+    </div>
+    <br /><br /><br />
+    <br />
+
+    <script>
+         let app=new Vue({
+            el:'#addLectureForm',  
+            data:{
+                lectureName: '',
+                teachers: [],
+                selected: '',
+                courseId: '',
+                batchId: ''
+            },
+            mounted()
+            {
+                this.getAllTeachers()
+            },
+            methods:{
+                getAllTeachers()
+                {
+                    axios.get("http://localhost:2222/teachers")
+                    .then((response)=>{
+                        this.teachers = response.data
+                    })
+                },
+
+                addLecture()
+                {
+                    this.courseId = localStorage['courseId']
+                    this.batchId = localStorage['batchId']
+                    axios.post("http://localhost:2222/courses/" + this.courseId + "/batches/" + this.batchId + "/lectures", {
+                        lectureName: this.lectureName,
+                        teacherId: this.selected
+                     })
+                    .then((response) => {
+                            window.alert('Lecture added successfully!')
+                    })                           
+                    .catch((err) => {
+                        console.log("Error adding new lecture")
+                    })
+                }
+                           
+            }
+        })
+    </script>
+</body>
+</html>
